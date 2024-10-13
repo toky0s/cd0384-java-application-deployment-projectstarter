@@ -9,7 +9,7 @@ module com.udacity.catpoint.security {
     exports com.udacity.catpoint.security.data to app;
     exports com.udacity.catpoint.security.service to app;
 
-    opens com.udacity.catpoint.security.data to com.google.gson, org.mockito, app;
-    opens com.udacity.catpoint.security.service to org.mockito;
-    opens com.udacity.catpoint.security.application to org.mockito;
+    opens com.udacity.catpoint.security.data to com.google.gson, org.mockito, org.junit.jupiter.api, app;
+    opens com.udacity.catpoint.security.service to org.junit.jupiter.api, org.mockito;
+    opens com.udacity.catpoint.security.application to org.junit.jupiter.api, org.mockito;
 }
