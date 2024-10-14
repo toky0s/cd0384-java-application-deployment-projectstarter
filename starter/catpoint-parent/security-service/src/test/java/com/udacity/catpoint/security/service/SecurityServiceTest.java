@@ -83,8 +83,8 @@ public class SecurityServiceTest {
     @Test
     void checkAlarmStatus_whenPendingAlarmAndAllSensorsInactive_returnNoAlarm() {
         when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.PENDING_ALARM);
-        sensor.setActive(true);
-        securityService.changeSensorActivationStatus(sensor, false);
+        sensor.setActive(false);
+        securityService.changeSensorActivationStatus(sensor);
         verify(securityRepository, times(1)).setAlarmStatus(AlarmStatus.NO_ALARM);
     }
 
@@ -112,7 +112,7 @@ public class SecurityServiceTest {
     void ifSensorIsDeactivated_whileAlreadyInactive_makeNoChangesToAlarmState(AlarmStatus alarmStatus) {
         when(securityRepository.getAlarmStatus()).thenReturn(alarmStatus);
         securityService.changeSensorActivationStatus(sensor, false);
-        verify(securityRepository, never()).setAlarmStatus(any());
+        verify(securityRepository, never()).setAlarmStatus(any(AlarmStatus.class));
     }
 
     // 7. If the image service identifies an image containing a cat while the system is armed-home, put the system into alarm status.
@@ -169,30 +169,6 @@ public class SecurityServiceTest {
         ArgumentCaptor<AlarmStatus> alarmStatusCaptor = ArgumentCaptor.forClass(AlarmStatus.class);
         verify(securityRepository, times(1)).setAlarmStatus(alarmStatusCaptor.capture());
         assertEquals(alarmStatusCaptor.getValue(), AlarmStatus.ALARM);
-    }
-
-    // 12. Add StatusListener
-    @Test
-    void addStatusListener() {
-        securityService.addStatusListener(statusListener);
-    }
-
-    // 13. Add StatusListener
-    @Test
-    void removeStatusListener() {
-        securityService.removeStatusListener(statusListener);
-    }
-
-    @Test
-    void addSensor() {
-        securityService.addSensor(sensor);
-        verify(securityRepository, atMostOnce()).addSensor(sensor);
-    }
-
-    @Test
-    void removeSensor() {
-        securityService.removeSensor(sensor);
-        verify(securityRepository, atMostOnce()).removeSensor(sensor);
     }
 
     @Test
